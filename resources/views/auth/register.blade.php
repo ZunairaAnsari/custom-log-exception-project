@@ -5,9 +5,29 @@
 @section('content')
     <h2 class="text-3xl font-bold text-gray-800 mb-8">Register</h2>
 
-    @if(session('success'))
-        <p class="bg-green-100 text-green-800 p-3 rounded-lg mb-6">{{ session('success') }}</p>
+    @if ($errors->any())
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+            <strong>Error!</strong>
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
     @endif
+
+    @if (session('error'))
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+            <strong>Error!</strong> {{ session('error') }}
+        </div>
+    @endif
+    
+    @if (session('success'))
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
+            <strong>Success!</strong> {{ session('success') }}
+        </div>
+    @endif
+
 
     <form action="{{ route('register') }}" method="POST" class="bg-white p-8 rounded-lg shadow-lg" enctype="multipart/form-data">
         @csrf

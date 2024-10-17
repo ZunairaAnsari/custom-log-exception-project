@@ -17,6 +17,8 @@ class AuthController extends Controller
     public function register(Request $request)
     {
      
+      try{
+            // Validate the form data
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
@@ -24,19 +26,23 @@ class AuthController extends Controller
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Validate image
         ]);
 
-   
+
         $path = $request->file('image')->store('images', 'public');
 
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'image' => $path, 
+            'image' => $path,
         ]);
 
         Auth::attempt($request->only('email', 'password'));
 
         return redirect()->route('login')->with('success', 'Registration successful! Welcome.');
+      }
+      catch(\Exception $e){
+        return redirect()->back()->withErrors(['error' => 'Registration failed! '.$e->getMessage()])->withInput();
+      }
     }
     public function showLoginForm()
     {
@@ -45,17 +51,22 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string',
-        ]);
+       try{
+            $request->validate([
+                'email' => 'required|string|email',
+                'password' => 'required|string',
+            ]);
 
-        // Attempt to log the user in
-        if (Auth::attempt($request->only('email', 'password'))) {
-            return redirect()->route('posts.index')->with('success', 'Login successful!');
-        }
+            // Attempt to log the user in
+            if (Auth::attempt($request->only('email', 'password'))) {
+                return redirect()->route('posts.index')->with('success', 'Login successful!');
+            }
 
-        return redirect()->back()->withErrors(['email' => 'Invalid credentials'])->withInput();
+            return redirect()->back()->withErrors(['email' => 'Invalid credentials'])->withInput();
+       }
+       catch(\Exception $e){
+        return redirect()->back()->withErrors(['error' => 'Login failed! '.$e->getMessage()])->withInput();
+       }
     }
 
    
