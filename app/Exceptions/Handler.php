@@ -27,4 +27,18 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+    protected $dontReport = [
+        // other exceptions
+        DatabaseConnectionException::class,
+    ];
+
+    public function render($request, Throwable $exception)
+    {
+        if ($exception instanceof DatabaseConnectionException) {
+            return $exception->render($request);
+        }
+
+        return parent::render($request, $exception);
+    }
 }

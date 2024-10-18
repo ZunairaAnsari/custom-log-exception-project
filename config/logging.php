@@ -52,6 +52,13 @@ return [
     */
 
     'channels' => [
+
+        'database' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/database.log'),
+            'level' => 'error',
+        ],
+        
         'custom' => [
             'driver' => 'single',
             'path' => storage_path('logs/custom.log'),

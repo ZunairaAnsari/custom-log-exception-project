@@ -28,11 +28,26 @@
     <!-- Header Section -->
     <header class="bg-gradient-to-r from-peach-200 via-lavender-300 to-sky-200 text-gray-800 py-6 shadow-md">
         <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-4xl font-bold text-gray-900">Mobitising</h1>
+            @if (Auth::check())
+             <ul class="flex space-x-6">
+               <li class="flex items-center space-x-2">
+                <img src="{{ Auth::user()->image ? asset('storage/' . Auth::user()->image) : asset('images/default-user.png') }}" 
+                     alt="{{ Auth::user()->name }}" class="w-8 h-8 rounded-full">
+                <h1 class="text-4xl font-bold text-gray-900">{{ Auth::user()->name }}</h1>     
+               </li>
+
+             </ul>    
+     
+            @else
+               <h1 class="text-4xl font-bold text-gray-900">Mobitising</h1>
+            @endif
+           
             <nav>
                 <ul class="flex space-x-6">
                     @if (Auth::check())
+                     
                         <li><a href="{{ url('/') }}" class="hover:text-peach-500">Home</a></li>
+                        <li><a href="{{ route('users.index') }}" class="hover:text-peach-500">Users</a></li>
                         <li><a href="{{ route('posts.index') }}" class="hover:text-peach-500">Posts</a></li>
                         <li><a href="{{ route('logout') }}" class="hover:text-peach-500">Logout</a></li>
                     @else

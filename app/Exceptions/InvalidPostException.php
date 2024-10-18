@@ -20,6 +20,7 @@ class InvalidPostException extends Exception
 
     public function render($request)
     {
-        return response()->view('errors.invalid-post', [], 400);
+        return response()->view('errors.invalid-post', ['message' => $this->getMessage()], 404);  // Pass $this->getMessage()
     }
+
 }
